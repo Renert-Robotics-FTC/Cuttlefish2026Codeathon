@@ -39,7 +39,7 @@ public class PivotSubsystem {
 
     private ElapsedTime timer = new ElapsedTime();
 
-    public PivotSubsystem(DcMotorEx pivotMotor, Servo switchServo){
+    public PivotSubsystem(DcMotorEx pivotMotor){
         this.pivotMotor = pivotMotor;//kinda like a variable for the motor so it can be used elsewhere
     }
 
@@ -62,12 +62,17 @@ public class PivotSubsystem {
 
     public void updatePivot() {
         int error = targetDestination - getPivotPosition();//find the error
-        double power = kP * error;//how much power you need to get there(slows the closer it is)
-        power = Range.clip(power,-1,1);//make sure it stays in the range of how FTC motors work
+        double pContribution = kP * error;//how much power you need to get there(slows the closer it is)
         int changeInError = error - previousError;//Need for derivative
         double deltaTime = timer.seconds();//find the amount of time it takes to move a distance
         timer.reset();
-        double derivative = changeInError /deltaTime;//found derivative
+        double derivative = 0;
+        if (deltaTime > 0) {
+            derivative = changeInError / deltaTime;
+        }
+        double dContribution = derivative *  kD;
+        double power = pContribution + dContribution;
+        power = Range.clip(power,-1,1);//make sure it stays in the range of how FTC motors work
         setPivotMotor(power);//moves the motor
         previousError = error;//need for derivative
     }
