@@ -16,7 +16,6 @@ boolean indexing = false;
     public void runOpMode(){
         //create subsystem objects here
         indexerspinning indexer = new indexerspinning(hardwareMap);
-        waitForStart();
 
         while (opModeIsActive()) {
             gamepad1.a = indexing;
