@@ -34,8 +34,8 @@ public class PivotSubsystem {
 
 
     private final int INTAKE_POSITION = 0;
-    private final int CORE_POSITION = 0;
-    private final int NODE_POSITION = 0;
+    private final int CORE_POSITION = 800;
+    private final int NODE_POSITION = 1900;
 
     private ElapsedTime timer = new ElapsedTime();
 
