@@ -28,7 +28,8 @@ boolean indexing = false;
         waitForStart();
 
         while (opModeIsActive()) {
-            //put loop code here
+            //When gamepad left bumper is pressed, it shoots forward
+            //when gamepad right bumper is pressed it shoots backwards
             shootForward = gamepad1.left_bumper;
             shootBack = gamepad1.right_bumper;
             otherSystem.shoot(shootForward, shootBack);
