@@ -11,10 +11,11 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 @TeleOp(name = "Main Teleop")
 public class Teleop extends LinearOpMode {
 
-
+boolean indexing = false;
     @Override
     public void runOpMode(){
         //create subsystem objects here
+        indexerspinning indexer = new indexerspinning(hardwareMap);
         boolean shootForward = false;
         boolean shootBack = false;
         ShooterSubsystem otherSystem = new ShooterSubsystem(hardwareMap);
@@ -43,7 +44,15 @@ public class Teleop extends LinearOpMode {
             if (gamepad1.y) {
                 pivotSubsystem.goToNode();
             }
+            
+            gamepad1.x = indexing;
+            if (indexing){
+                indexer.indexerspin1();
 
+
+            } else{
+                indexer.indexerspin0();
+            }
             driveSubsystem.updateInputs(straight, strafe, turn);
             driveSubsystem.update();
             pivotSubsystem.updatePivot();
