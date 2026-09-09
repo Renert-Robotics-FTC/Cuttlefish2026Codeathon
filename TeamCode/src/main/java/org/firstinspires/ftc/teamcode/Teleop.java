@@ -16,19 +16,6 @@ boolean indexing = false;
     public void runOpMode(){
         //create subsystem objects here
         indexerspinning indexer = new indexerspinning(hardwareMap);
-
-        while (opModeIsActive()) {
-            gamepad1.a = indexing;
-            if (indexing){
-                indexer.indexerspin1();
-
-
-            } else{
-                indexer.indexerspin0();
-            }
-
-
-        }
         boolean shootForward = false;
         boolean shootBack = false;
         ShooterSubsystem otherSystem = new ShooterSubsystem(hardwareMap);
@@ -57,7 +44,15 @@ boolean indexing = false;
             if (gamepad1.y) {
                 pivotSubsystem.goToNode();
             }
+            
+            gamepad1.x = indexing;
+            if (indexing){
+                indexer.indexerspin1();
 
+
+            } else{
+                indexer.indexerspin0();
+            }
             driveSubsystem.updateInputs(straight, strafe, turn);
             driveSubsystem.update();
             pivotSubsystem.updatePivot();
