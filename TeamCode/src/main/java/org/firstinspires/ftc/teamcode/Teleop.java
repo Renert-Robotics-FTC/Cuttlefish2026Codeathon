@@ -11,38 +11,31 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 @TeleOp(name = "Main Teleop")
 public class Teleop extends LinearOpMode {
 
-boolean indexing = false;
+  
+
+    boolean indexing = false;
     @Override
     public void runOpMode(){
         //create subsystem objects here
         indexerspinning indexer = new indexerspinning(hardwareMap);
-        waitForStart();
-
-        while (opModeIsActive()) {
-            gamepad1.a = indexing;
-            if (indexing){
-                indexer.indexerspin1();
-
-
-            } else{
-                indexer.indexerspin0();
-            }
-
-
-        }
         boolean shootForward = false;
         boolean shootBack = false;
         ShooterSubsystem otherSystem = new ShooterSubsystem(hardwareMap);
         DcMotorEx pivotMotor = hardwareMap.get(DcMotorEx.class, "pivotMotor");
         DriveSubsystem driveSubsystem = new DriveSubsystem(hardwareMap);
         PivotSubsystem pivotSubsystem = new PivotSubsystem(pivotMotor);
-     
-
-
+        Odometry odo = new Odometry(hardwareMap);
+      
         waitForStart();
 
         while (opModeIsActive()) {
-            //put loop code here
+            odo.update();
+            telemetry.addData("X", odo.getXPosition());
+            telemetry.addData("Y", odo.getYPosition());
+            telemetry.addData("Heading", odo.Heading());
+            telemetry.update();
+            //When gamepad left bumper is pressed, it shoots forward
+            //when gamepad right bumper is pressed it shoots backwards
             shootForward = gamepad1.left_bumper;
             shootBack = gamepad1.right_bumper;
             otherSystem.shoot(shootForward, shootBack);
@@ -58,7 +51,15 @@ boolean indexing = false;
             if (gamepad1.y) {
                 pivotSubsystem.goToNode();
             }
+            
+            gamepad1.x = indexing;
+            if (indexing){
+                indexer.indexerspin1();
 
+
+            } else{
+                indexer.indexerspin0();
+            }
             driveSubsystem.updateInputs(straight, strafe, turn);
             driveSubsystem.update();
             pivotSubsystem.updatePivot();
