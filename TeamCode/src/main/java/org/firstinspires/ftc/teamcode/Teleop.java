@@ -11,7 +11,9 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 @TeleOp(name = "Main Teleop")
 public class Teleop extends LinearOpMode {
 
-boolean indexing = false;
+  
+
+    boolean indexing = false;
     @Override
     public void runOpMode(){
         //create subsystem objects here
@@ -22,12 +24,16 @@ boolean indexing = false;
         DcMotorEx pivotMotor = hardwareMap.get(DcMotorEx.class, "pivotMotor");
         DriveSubsystem driveSubsystem = new DriveSubsystem(hardwareMap);
         PivotSubsystem pivotSubsystem = new PivotSubsystem(pivotMotor);
-     
-
-
+        Odometry odo = new Odometry(hardwareMap);
+      
         waitForStart();
 
         while (opModeIsActive()) {
+            odo.update();
+            telemetry.addData("X", odo.getXPosition());
+            telemetry.addData("Y", odo.getYPosition());
+            telemetry.addData("Heading", odo.Heading());
+            telemetry.update();
             //When gamepad left bumper is pressed, it shoots forward
             //when gamepad right bumper is pressed it shoots backwards
             shootForward = gamepad1.left_bumper;
